@@ -1,0 +1,5 @@
+cd packages/alias
+mkdir -p node_modules/@rollup
+ln -s ../.. node_modules/@rollup/plugin-alias
+tape test/test.js
+rm -rf node_modules
