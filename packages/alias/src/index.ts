@@ -1,14 +1,6 @@
-import { platform } from 'os';
+import type { Plugin } from 'rollup';
 
-import { PartialResolvedId, Plugin } from 'rollup';
-import slash from 'slash';
-
-import { Alias, ResolverFunction, RollupAliasOptions } from '../types';
-
-const VOLUME = /^([A-Z]:)/i;
-const IS_WINDOWS = platform() === 'win32';
-
-const noop = () => null;
+import type { ResolvedAlias, ResolverFunction, ResolverObject, RollupAliasOptions } from '../types';
 
 function matches(pattern: string | RegExp, importee: string) {
   if (pattern instanceof RegExp) {
@@ -20,49 +12,50 @@ function matches(pattern: string | RegExp, importee: string) {
   if (importee === pattern) {
     return true;
   }
-  const importeeStartsWithKey = importee.indexOf(pattern) === 0;
-  const importeeHasSlashAfterKey = importee.substring(pattern.length)[0] === '/';
-  return importeeStartsWithKey && importeeHasSlashAfterKey;
+  // eslint-disable-next-line prefer-template
+  return importee.startsWith(pattern + '/');
 }
 
-function normalizeId(id: string): string;
-function normalizeId(id: string | undefined): string | undefined;
-function normalizeId(id: string | undefined) {
-  if (typeof id === 'string' && (IS_WINDOWS || VOLUME.test(id))) {
-    return slash(id.replace(VOLUME, ''));
-  }
-  return id;
-}
-
-function getEntries({ entries }: RollupAliasOptions): Alias[] {
+function getEntries({ entries, customResolver }: RollupAliasOptions): readonly ResolvedAlias[] {
   if (!entries) {
     return [];
   }
 
+  const resolverFunctionFromOptions = resolveCustomResolver(customResolver);
+
   if (Array.isArray(entries)) {
-    return entries;
+    return entries.map((entry) => {
+      return {
+        find: entry.find,
+        replacement: entry.replacement,
+        resolverFunction: resolveCustomResolver(entry.customResolver) || resolverFunctionFromOptions
+      };
+    });
   }
 
   return Object.entries(entries).map(([key, value]) => {
-    return { find: key, replacement: value };
+    return { find: key, replacement: value, resolverFunction: resolverFunctionFromOptions };
   });
 }
 
-function getCustomResolver(
-  { customResolver }: Alias,
-  options: RollupAliasOptions
+function getHookFunction<T extends Function>(hook: T | { handler?: T }): T | null {
+  if (typeof hook === 'function') {
+    return hook;
+  }
+  if (hook && 'handler' in hook && typeof hook.handler === 'function') {
+    return hook.handler;
+  }
+  return null;
+}
+
+function resolveCustomResolver(
+  customResolver: ResolverFunction | ResolverObject | null | undefined
 ): ResolverFunction | null {
   if (typeof customResolver === 'function') {
     return customResolver;
   }
-  if (customResolver && typeof customResolver.resolveId === 'function') {
-    return customResolver.resolveId;
-  }
-  if (typeof options.customResolver === 'function') {
-    return options.customResolver;
-  }
-  if (options.customResolver && typeof options.customResolver.resolveId === 'function') {
-    return options.customResolver.resolveId;
+  if (customResolver) {
+    return getHookFunction(customResolver.resolveId);
   }
   return null;
 }
@@ -73,52 +66,38 @@ export default function alias(options: RollupAliasOptions = {}): Plugin {
   if (entries.length === 0) {
     return {
       name: 'alias',
-      resolveId: noop
+      resolveId: () => null
     };
   }
 
   return {
     name: 'alias',
-    buildStart(inputOptions) {
-      return Promise.all(
-        [...entries, options].map(
+    async buildStart(inputOptions) {
+      await Promise.all(
+        [...(Array.isArray(options.entries) ? options.entries : []), options].map(
           ({ customResolver }) =>
-            customResolver &&
-            typeof customResolver === 'object' &&
-            typeof customResolver.buildStart === 'function' &&
-            customResolver.buildStart.call(this, inputOptions)
+            customResolver && getHookFunction(customResolver.buildStart)?.call(this, inputOptions)
         )
-      ).then(() => {
-        // enforce void return value
-      });
+      );
     },
-    resolveId(importee, importer) {
-      const importeeId = normalizeId(importee);
-      const importerId = normalizeId(importer);
-
+    resolveId(importee, importer, resolveOptions) {
       // First match is supposed to be the correct one
-      const matchedEntry = entries.find((entry) => matches(entry.find, importeeId));
-      if (!matchedEntry || !importerId) {
+      const matchedEntry = entries.find((entry) => matches(entry.find, importee));
+      if (!matchedEntry) {
         return null;
       }
 
-      const updatedId = normalizeId(
-        importeeId.replace(matchedEntry.find, matchedEntry.replacement)
-      );
+      const updatedId = importee.replace(matchedEntry.find, matchedEntry.replacement);
 
-      const customResolver = getCustomResolver(matchedEntry, options);
-      if (customResolver) {
-        return customResolver.call(this, updatedId, importerId);
+      if (matchedEntry.resolverFunction) {
+        return matchedEntry.resolverFunction.call(this, updatedId, importer, resolveOptions);
       }
 
-      return this.resolve(updatedId, importer, { skipSelf: true }).then((resolved) => {
-        let finalResult: PartialResolvedId | null = resolved;
-        if (!finalResult) {
-          finalResult = { id: updatedId };
-        }
-
-        return finalResult;
-      });
+      return this.resolve(
+        updatedId,
+        importer,
+        Object.assign({ skipSelf: true }, resolveOptions)
+      ).then((resolved) => resolved || { id: updatedId });
     }
   };
 }

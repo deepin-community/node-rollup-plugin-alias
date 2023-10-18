@@ -1,4 +1,4 @@
 legacy/dist/
 packages/*/dist/
-node_modules/@rollup/
+node_modules/
 packages/alias/node_modules/

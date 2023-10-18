@@ -1,3 +1,92 @@
+node-rollup-plugin-alias (5.0.0~ds-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream version 5.0.0~ds
+
+ -- Yadd <yadd@debian.org>  Sun, 16 Jul 2023 12:08:18 +0400
+
+node-rollup-plugin-alias (4.0.3~ds-2) unstable; urgency=medium
+
+  * Team upload
+  * Back to unstable
+
+ -- Yadd <yadd@debian.org>  Sun, 16 Jul 2023 09:08:06 +0400
+
+node-rollup-plugin-alias (4.0.3~ds-1) experimental; urgency=medium
+
+  * Team upload
+  * Install the right changelog
+  * Update standards version to 4.6.2, no changes needed.
+  * New upstream version 4.0.3~ds
+
+ -- Yadd <yadd@debian.org>  Mon, 03 Apr 2023 16:59:35 +0400
+
+node-rollup-plugin-alias (4.0.2~ds-2) unstable; urgency=medium
+
+  * Team upload
+  * Fix test for rollup 2 (snapshots differ with rollup 3)
+
+ -- Yadd <yadd@debian.org>  Thu, 27 Oct 2022 14:58:21 +0200
+
+node-rollup-plugin-alias (4.0.2~ds-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream version 4.0.2~ds
+  * Drop patches:
+    + fix-for-recent-plugin-node-resolve
+    + fix-for-rollup-3
+    + update-test
+  * Refresh patches
+  * Update test & build
+
+ -- Yadd <yadd@debian.org>  Thu, 27 Oct 2022 14:25:36 +0200
+
+node-rollup-plugin-alias (3.1.9~ds-3) unstable; urgency=medium
+
+  * Team upload
+
+  [ Debian Janitor ]
+  * Apply multi-arch hints. + node-rollup-plugin-alias: Add Multi-Arch: foreign.
+
+  [ Yadd ]
+  * Add fix for rollup 3 (Closes: #1022650)
+
+ -- Yadd <yadd@debian.org>  Thu, 27 Oct 2022 13:49:26 +0200
+
+node-rollup-plugin-alias (3.1.9~ds-2) unstable; urgency=medium
+
+  * Team upload
+  * Update standards version to 4.6.1, no changes needed
+  * Fix test for recent @rollup/plugin-node-resolve (Closes: #1020089)
+
+ -- Yadd <yadd@debian.org>  Sun, 18 Sep 2022 09:00:19 +0200
+
+node-rollup-plugin-alias (3.1.9~ds-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream version 3.1.9~ds
+
+ -- Yadd <yadd@debian.org>  Sun, 06 Feb 2022 14:17:34 +0100
+
+node-rollup-plugin-alias (3.1.8~ds-2) unstable; urgency=medium
+
+  * Team upload
+  * Workaround typescript paths bug (Closes: #1002220)
+  * Fix test (Closes: #1002220)
+
+ -- Yadd <yadd@debian.org>  Tue, 21 Dec 2021 18:28:51 +0100
+
+node-rollup-plugin-alias (3.1.8~ds-1) unstable; urgency=medium
+
+  * Team upload
+  * Drop nodejs dependency
+  * Fix repacksuffix
+  * New upstream version 3.1.8~ds
+  * Refresh patches
+  * Fix excluded files
+
+ -- Yadd <yadd@debian.org>  Tue, 14 Dec 2021 14:09:31 +0100
+
 node-rollup-plugin-alias (3.1.1.repack-3) unstable; urgency=medium
 
   * Team upload

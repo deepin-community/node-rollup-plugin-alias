@@ -1,1 +1,3 @@
 replace-ava-by-tape.diff
+tsc-workaround.patch
+fix-test-for-rollup-2.patch
