@@ -5,14 +5,13 @@ Section: javascript
 Testsuite: autopkgtest-pkg-nodejs
 Priority: optional
 Build-Depends: debhelper-compat (= 13)
+ , dh-sequence-nodejs
  , node-rollup-plugin-node-resolve (>= 9.0.0) <!nocheck>
  , node-rollup-plugin-typescript
  , node-slash <!nocheck>
  , node-tape <!nocheck>
- , nodejs (>= 10)
- , dh-sequence-nodejs
  , rollup (>> 0.68.2+ds~)
-Standards-Version: 4.6.0
+Standards-Version: 4.6.2
 Vcs-Browser: https://salsa.debian.org/js-team/node-rollup-plugin-alias
 Vcs-Git: https://salsa.debian.org/js-team/node-rollup-plugin-alias.git
 Homepage: https://github.com/rollup/plugins
@@ -26,6 +25,7 @@ Recommends: rollup
 Enhances: rollup
 Breaks: rollup (<< 0.68.2+ds~)
 Provides: ${nodejs:Provides}
+Multi-Arch: foreign
 Description: Resolves aliases with Rollup
  Rollup is a smaller, more efficient alternative to webpack and Browserify to
  bundle JavaScript files. Compared to the other tools for creating JavaScript

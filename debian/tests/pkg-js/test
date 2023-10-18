@@ -1,5 +1,5 @@
 cd packages/alias
-mkdir -p node_modules/@rollup
-ln -s ../.. node_modules/@rollup/plugin-alias
-tape test/test.js
-rm -rf node_modules
+if test "$AUTOPKGTEST_TMP" != ""; then
+	ln -s /usr/share/nodejs/@rollup/plugin-alias/dist || true
+fi
+tape test/test.mjs

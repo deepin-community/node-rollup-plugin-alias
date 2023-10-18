@@ -1,32 +1,20 @@
 Description: replace ava by tape in test
 Author: Xavier Guimard <yadd@debian.org>
 Forwarded: not-needed
-Last-Update: 2021-10-25
+Last-Update: 2022-10-27
 
---- a/packages/alias/test/test.js
-+++ b/packages/alias/test/test.js
-@@ -1,13 +1,14 @@
--import path, { posix } from 'path';
-+const path = require('path');
-+const posix = path.posix;
+--- a/packages/alias/test/test.mjs
++++ b/packages/alias/test/test.mjs
+@@ -2,7 +2,7 @@
+ import { fileURLToPath } from 'url';
+ import { createRequire } from 'module';
  
 -import test from 'ava';
--import { rollup } from 'rollup';
--import slash from 'slash';
-+const test = require('tape');
-+const { rollup } = require('rollup');
-+const slash = require('slash');
++import test from 'tape';
+ import { rollup } from 'rollup';
+ import nodeResolvePlugin from '@rollup/plugin-node-resolve';
  
- // eslint-disable-next-line import/no-unresolved, import/extensions
--import nodeResolvePlugin from '@rollup/plugin-node-resolve';
-+const { nodeResolve }= require('@rollup/plugin-node-resolve');
- 
--import alias from '../dist';
-+const alias = require('@rollup/plugin-alias');
- 
- const normalizePath = (pathToNormalize) => slash(pathToNormalize.replace(/^([A-Z]:)/, ''));
- const DIRNAME = normalizePath(__dirname);
-@@ -67,21 +68,25 @@
+@@ -67,18 +67,21 @@
  
  test('type', (t) => {
    t.is(typeof alias, 'function');
@@ -47,211 +35,66 @@ Last-Update: 2021-10-25
 +  t.end();
  });
  
--test('Simple aliasing (array)', (t) =>
-+test('Simple aliasing (array)', (t) => {
-+  t.plan(1);
-   resolveAliasWithRollup(
-     {
-       entries: [
-@@ -95,9 +100,11 @@
-       { source: 'pony', importer: '/src/importer.js' },
-       { source: './local', importer: '/src/importer.js' }
-     ]
--  ).then((result) => t.deepEqual(result, ['bar', 'paradise', 'global'])));
-+  ).then((result) => t.deepEqual(result, ['bar', 'paradise', 'global']))
-+});
- 
--test('Simple aliasing (object)', (t) =>
-+test('Simple aliasing (object)', (t) => {
-+  t.plan(1);
-   resolveAliasWithRollup(
-     {
-       entries: {
-@@ -111,9 +118,11 @@
-       { source: 'pony', importer: '/src/importer.js' },
-       { source: './local', importer: '/src/importer.js' }
-     ]
--  ).then((result) => t.deepEqual(result, ['bar', 'paradise', 'global'])));
-+  ).then((result) => t.deepEqual(result, ['bar', 'paradise', 'global']))
-+});
- 
--test('RegExp aliasing', (t) =>
-+test('RegExp aliasing', (t) => {
-+  t.plan(1);
-   resolveAliasWithRollup(
-     {
-       entries: [
-@@ -131,9 +140,11 @@
-     ]
-   ).then((result) =>
-     t.deepEqual(result, ['fooooooooobar2019', 'i/am/a/barbie/girl', null, null, 'this/is/strict'])
--  ));
-+  )
-+});
- 
--test('Will not confuse modules with similar names', (t) =>
-+test('Will not confuse modules with similar names', (t) => {
-+  t.plan(1);
-   resolveAliasWithRollup(
-     {
-       entries: [
-@@ -146,26 +157,32 @@
-       { source: './fooze/bar', importer: '/src/importer.js' },
-       { source: './someFile.foo', importer: '/src/importer.js' }
-     ]
--  ).then((result) => t.deepEqual(result, [null, null, null])));
-+  ).then((result) => t.deepEqual(result, [null, null, null]))
-+});
- 
--test('Leaves entry file untouched if matches alias', (t) =>
-+test('Leaves entry file untouched if matches alias', (t) => {
-+  t.plan(1);
-   resolveAliasWithRollup(
-     {
-       entries: [{ find: 'abacaxi', replacement: './abacaxi' }]
-     },
-     // eslint-disable-next-line no-undefined
-     [{ source: 'abacaxi/entry.js' }]
--  ).then((result) => t.deepEqual(result, [null])));
-+  ).then((result) => t.deepEqual(result, [null]))
-+});
- 
--test('i/am/a/file', (t) =>
-+test('i/am/a/file', (t) => {
-+  t.plan(1);
-   resolveAliasWithRollup(
-     {
-       entries: [{ find: 'resolve', replacement: 'i/am/a/file' }]
-     },
-     [{ source: 'resolve', importer: '/src/import.js' }]
--  ).then((result) => t.deepEqual(result, ['i/am/a/file'])));
-+  ).then((result) => t.deepEqual(result, ['i/am/a/file']))
-+});
- 
--test('Windows absolute path aliasing', (t) =>
-+test('Windows absolute path aliasing', (t) => {
-+  t.plan(1);
-   resolveAliasWithRollup(
-     {
-       entries: [
-@@ -178,7 +195,8 @@
-     [{ source: 'resolve', importer: posix.resolve(DIRNAME, './fixtures/index.js') }]
-   ).then((result) =>
-     t.deepEqual(result, [normalizePath('E:\\react\\node_modules\\fbjs\\lib\\warning')])
--  ));
-+  )
-+});
- 
- /**
-  * Helper function to get moduleIDs from final Rollup bundle
-@@ -237,11 +255,13 @@
-             `expected ${normalizedIds[index]} to end with ${expectedId}`
-           )
-         );
-+      t.end();
-     }));
+ test('Simple aliasing (array)', (t) =>
+@@ -265,6 +268,7 @@
  
  test('Global customResolver function', (t) => {
    const customResult = 'customResult';
- 
 +  t.plan(1);
+ 
    return resolveAliasWithRollup(
      {
-       entries: [
-@@ -260,6 +280,7 @@
+@@ -288,6 +292,7 @@
+ test('Local customResolver function', (t) => {
    const customResult = 'customResult';
    const localCustomResult = 'localCustomResult';
- 
 +  t.plan(1);
+ 
    return resolveAliasWithRollup(
      {
-       entries: [
-@@ -278,6 +299,7 @@
+@@ -311,6 +316,7 @@
+ 
  test('Global customResolver plugin-like object', (t) => {
    const customResult = 'customResult';
- 
 +  t.plan(1);
+ 
    return resolveAliasWithRollup(
      {
-       entries: [
-@@ -296,6 +318,7 @@
+@@ -334,6 +340,7 @@
+ test('Local customResolver plugin-like object', (t) => {
    const customResult = 'customResult';
    const localCustomResult = 'localCustomResult';
++  t.plan(1);
  
+   return resolveAliasWithRollup(
+     {
+@@ -480,6 +487,7 @@
+       ]
+     ]);
+     t.deepEqual(result, ['entry-point', 'non-entry-point']);
++    t.end();
+   });
+ });
+ 
+@@ -530,6 +538,7 @@
+       ]
+     ]);
+     t.deepEqual(result, ['entry-point', 'non-entry-point']);
++    t.end();
+   });
+ });
+ 
+@@ -538,6 +547,7 @@
+     entry: 0,
+     option: 0
+   };
 +  t.plan(1);
    return resolveAliasWithRollup(
      {
        entries: [
-@@ -311,21 +334,22 @@
-   ).then((result) => t.deepEqual(result, [localCustomResult]));
+@@ -607,4 +617,5 @@
+         `expected ${normalizedIds[index]} to end with ${expectedId}`
+       )
+     );
++  t.end();
  });
- 
--test('supports node-resolve as a custom resolver', (t) =>
-+test('supports node-resolve as a custom resolver', (t) => {
-+  t.plan(1);
-   resolveAliasWithRollup(
-     {
-       entries: [
-         {
-           find: 'local-resolver',
-           replacement: path.resolve(DIRNAME, 'fixtures'),
--          customResolver: nodeResolvePlugin()
-+          customResolver: nodeResolve()
-         },
-         {
-           find: 'global-resolver',
-           replacement: path.resolve(DIRNAME, 'fixtures', 'folder')
-         }
-       ],
--      customResolver: nodeResolvePlugin()
-+      customResolver: nodeResolve()
-     },
-     [
-       { source: 'local-resolver', importer: posix.resolve(DIRNAME, './files/index.js') },
-@@ -336,9 +360,11 @@
-       path.resolve(DIRNAME, 'fixtures', 'index.js'),
-       path.resolve(DIRNAME, 'fixtures', 'folder', 'index.js')
-     ])
--  ));
-+  )
-+});
- 
--test('Alias + rollup-plugin-node-resolve', (t) =>
-+test('Alias + rollup-plugin-node-resolve', (t) => {
-+  t.plan(3);
-   rollup({
-     input: './test/fixtures/index.js',
-     plugins: [
-@@ -351,20 +377,20 @@
-           { find: 'superdeep', replacement: './deep/deep2' }
-         ]
-       }),
--      nodeResolvePlugin()
-+      nodeResolve()
-     ]
-   })
-     .then(getModuleIdsFromBundle)
-     .then((moduleIds) => {
-       const normalizedIds = moduleIds.map((id) => path.resolve(id)).sort();
--      t.is(normalizedIds.length, 6);
-+      //t.is(normalizedIds.length, 6);
-       [
-         '/fixtures/aliasMe.js',
-         '/fixtures/folder/anotherNumber.js',
-         '/fixtures/folder/deep/deep2/index.js',
--        '/fixtures/index.js',
--        '/fixtures/localAliasMe.js',
--        '/fixtures/nonAliased.js'
-+        //'/fixtures/index.js',
-+        //'/fixtures/localAliasMe.js',
-+        //'/fixtures/nonAliased.js'
-       ]
-         .map((id) => path.normalize(id))
-         .forEach((expectedId, index) =>
-@@ -374,4 +400,5 @@
-             `expected ${normalizedIds[index]} to end with ${expectedId}`
-           )
-         );
--    }));
-+    })
-+});

@@ -1,4 +1,13 @@
-import { Plugin, PluginHooks } from 'rollup';
+import type { Plugin, PluginHooks } from 'rollup';
+
+type MapToFunction<T> = T extends Function ? T : never;
+
+export type ResolverFunction = MapToFunction<PluginHooks['resolveId']>;
+
+export interface ResolverObject {
+  buildStart?: PluginHooks['buildStart'];
+  resolveId: ResolverFunction;
+}
 
 export interface Alias {
   find: string | RegExp;
@@ -6,11 +15,10 @@ export interface Alias {
   customResolver?: ResolverFunction | ResolverObject | null;
 }
 
-export type ResolverFunction = PluginHooks['resolveId'];
-
-export interface ResolverObject {
-  buildStart?: PluginHooks['buildStart'];
-  resolveId: ResolverFunction;
+export interface ResolvedAlias {
+  find: string | RegExp;
+  replacement: string;
+  resolverFunction: ResolverFunction | null;
 }
 
 export interface RollupAliasOptions {

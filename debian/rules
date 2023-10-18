@@ -5,5 +5,7 @@
 	dh $@
 
 override_dh_auto_build:
-	# Build @rollup/plugin-alias
 	cd packages/alias && rollup -c
+
+override_dh_installchangelogs:
+	dh_installchangelogs packages/alias/CHANGELOG.md

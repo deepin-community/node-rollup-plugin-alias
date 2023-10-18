@@ -1,0 +1,15 @@
+Description: tsc workaround
+Author: Yadd <yadd@debian.org>
+Forwarded: not-needed
+Last-Update: 2022-10-27
+
+--- a/packages/alias/src/index.ts
++++ b/packages/alias/src/index.ts
+@@ -33,6 +33,7 @@
+     });
+   }
+ 
++// @ts-ignore
+   return Object.entries(entries).map(([key, value]) => {
+     return { find: key, replacement: value, resolverFunction: resolverFunctionFromOptions };
+   });

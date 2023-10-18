@@ -1,5 +1,116 @@
 # @rollup/plugin-alias ChangeLog
 
+## v5.0.0
+
+_2023-04-04_
+
+### Breaking Changes
+
+- feat: resolve entry id [#1402](https://github.com/rollup/plugins/pull/1402)
+
+## v4.0.4
+
+_2023-04-04_
+
+### Updates
+
+- docs: fix README esm error [#1451](https://github.com/rollup/plugins/pull/1451)
+
+## v4.0.3
+
+_2023-01-20_
+
+### Bugfixes
+
+- fix: types should come first in exports [#1403](https://github.com/rollup/plugins/pull/1403)
+
+## v4.0.2
+
+_2022-10-21_
+
+### Updates
+
+- chore: update rollup dependencies ([3038271](https://github.com/rollup/plugins/commit/303827191ede6b2e4eade96c6968ed16a587683f))
+
+## v4.0.1
+
+_Skipped for repo rebase_
+
+## v4.0.0
+
+_2022-10-07_
+
+### Breaking Changes
+
+- fix: prepare for Rollup 3, handle latest node-resolve [#1269](https://github.com/rollup/plugins/pull/1269)
+
+## v3.1.9
+
+_2021-12-31_
+
+### Updates
+
+- refactor: avoid resolving customResolver every time handling resolveId (#1024)
+
+## v3.1.8
+
+_2021-10-19_
+
+### Bugfixes
+
+- fix: pass on isEntry flag and custom options (#1017)
+
+## v3.1.7
+
+_2021-10-19_
+
+### Bugfixes
+
+- fix: revert #1000 for hooks bug (#1022)
+
+## v3.1.6
+
+_2021-10-19_
+
+### Updates
+
+- refactor: avoid resolving customResolver every time handling resolveId (#1000)
+
+## v3.1.5
+
+_2021-07-29_
+
+### Bugfixes
+
+- fix: paths for aliases across multiple Windows drives (#896)
+
+## v3.1.4
+
+_2021-07-16_
+
+### Updates
+
+- docs: add helpful notes (#612)
+
+## v3.1.3
+
+_2021-07-15_
+
+### Updates
+
+- docs: fix link to resolveId hook (#881)
+
+## v3.1.2
+
+_2021-01-29_
+
+### Updates
+
+- chore: upgrade TypeScript (#708)
+- chore: add missing readonly to internal function (#680)
+- chore: fix TS error in function call (d04778c)
+- chore: update dependencies (b3b8efd)
+
 ## v3.1.1
 
 _2020-06-05_

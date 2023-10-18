@@ -1,0 +1,4 @@
+rollup
+@rollup/plugin-node-resolve	test
+@rollup/plugin-typescript
+tape	test

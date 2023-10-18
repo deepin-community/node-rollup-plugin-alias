@@ -2,8 +2,8 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: @rollup/plugin-alias
 Upstream-Contact: https://github.com/rollup/plugins/issues
 Source: https://github.com/rollup/plugins
-Files-Excluded: *
-Files-Included: packages/alias shared util tsconfig.base.json
+Files-Excluded: packages/*
+Files-Included: packages/alias
 
 Files: *
 Copyright: 2019 RollupJS Plugin Contributors <https://github.com/rollup/plugins/graphs/contributors>

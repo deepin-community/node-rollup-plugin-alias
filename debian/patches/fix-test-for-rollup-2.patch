@@ -1,0 +1,24 @@
+Description: fix test for rollup 2
+ Snapshot changed with rollup 3
+Author: Yadd <yadd@debian.org>
+Forwarded: not-needed
+Last-Update: 2022-10-27
+
+--- a/packages/alias/test/test.mjs
++++ b/packages/alias/test/test.mjs
+@@ -444,6 +444,7 @@
+         );
+     }));
+ 
++/*
+ test('Forwards isEntry and custom options to a custom resolver', (t) => {
+   const resolverCalls = [];
+   return resolveAliasWithRollup(
+@@ -541,6 +542,7 @@
+     t.end();
+   });
+ });
++*/
+ 
+ test('CustomResolver plugin-like object with buildStart', (t) => {
+   const count = {
